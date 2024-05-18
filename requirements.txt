@@ -1,3 +1,4 @@
 scrapy
-libsql-experimental
+pandas
+pyarrow
 python-dotenv
