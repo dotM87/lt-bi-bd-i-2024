@@ -23,7 +23,9 @@ class NoticiasSpider(scrapy.Spider):
 
     def parse_noticia(self, response):
         item = response.meta['item']
-        item['cuerpo'] = ' '.join(response.css('.field-name-body .field-item p::text').extract())
+        # Limpiar el cuerpo del texto
+        cuerpo = response.css('.field-name-body .field-item p::text').extract()
+        item['cuerpo'] = ' '.join([parrafo.strip() for parrafo in cuerpo if parrafo.strip()])
         print(item)
         yield item
 
