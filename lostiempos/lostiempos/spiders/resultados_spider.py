@@ -8,15 +8,14 @@ class NoticiasSpider(scrapy.Spider):
     
     def parse(self, response):
         # Obtener los elementos <a> con las URL de los resultados
-        for resultado in response.css('.view-content .views-row .views-field-title'):
+        for resultado in response.css('.view-content .views-row'):
             item = NoticiaItem()
             item['pagina'] = 'Los Tiempos'
-            item['url'] = resultado.css('a::attr(href)').get()
-            item['fecha'] = resultado.css('.field-content::text').get()
-            item['titulo'] = resultado.css('a::text').get()
+            item['url'] = "https://www.lostiempos.com" + resultado.css('.views-field-title a::attr(href)').get()
+            item['fecha'] = resultado.css('.date-display-single::text').get()
+            item['titulo'] = resultado.css('.views-field-title a::text').get()
             yield response.follow(item['url'], self.parse_noticia, meta={'item': item})
             
-
         # Obtener la URL de la siguiente página de resultados
         next_page = response.css('.pager-next a::attr(href)').get()
         if next_page is not None:
